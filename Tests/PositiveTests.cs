@@ -1,10 +1,13 @@
 using Microsoft.Playwright;
 using NUnit.Framework;
 using MiaProject.Pages;
+using System.Threading.Tasks;
 
 namespace  MiaProject.Tests
-{
-     public class PlaywrightTests
+{     
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
+     public class e2eTest
     {
         private IBrowser _browser;
         private IPage _page;
@@ -17,6 +20,11 @@ namespace  MiaProject.Tests
             _playwright = await Playwright.CreateAsync();
             _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
             _page = await _browser.NewPageAsync();
+        }
+        [TearDown]
+        public async Task Teardown()
+        {
+            await _browser.CloseAsync();
         }
 
     [Test]
@@ -31,24 +39,21 @@ namespace  MiaProject.Tests
         await _basicPage.GoUrl();
         await Task.Delay(2000); 
         await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "C:\\Documents\\MiaProject\\Screenshots\\BasicPage_fullScreen.png", FullPage = true });
-        Console.WriteLine("Screenshot taken basic page.");
         await _basicPage.GoLink();
 
         await Task.Delay(2000); 
         await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "C:\\Documents\\MiaProject\\Screenshots\\OnlineSchoolPage_fullScreen.png", FullPage = true });
-        Console.WriteLine("Screenshot taken online-school page.");
         await _onlineSchoolPage.GoApplyNow();
 
         await Task.Delay(2000); 
         await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "C:\\Documents\\MiaProject\\Screenshots\\NoteBeforeApplicationPage_fullScreen.png", FullPage = true });
-        Console.WriteLine("Screenshot taken note before application page.");
         await _noteBeforeApplicationPage.GoNextPage();
 
 //First Parent
-        await _parentPage.fillfirstParent("Linda","Miller","test@example.com","Germany (Deutschland)","1551515888");
+        await _parentPage.fillfirstParent("Linda","Muller","test@example.com","+49","1551515888");
 //Second Parent
         await _parentPage.addSecondParent("Yes");
-        await _parentPage.fillSecondParent("Jhon", "Miller","test@example.com","+491551515777" );
+        await _parentPage.fillSecondParent("Jhon", "Muller","test@example.com","+491551515777" );
 //Common Data
         await _parentPage.check_facebookInstagram();
         await _parentPage.check_tikTok();
@@ -66,7 +71,7 @@ namespace  MiaProject.Tests
         await _studentPage.miaAcc1("Yes");
         await _studentPage.addSchooling1("Private School");
         await _studentPage.gradeCompleted1("65");
-
+//65- page don't have 
         await _studentPage.Challenges1("No");
         await _studentPage.check_moreInform1();
         await _studentPage.check_flexSchedule1();

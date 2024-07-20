@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using System.Threading.Tasks;
 
 namespace MiaProject.Pages
 {

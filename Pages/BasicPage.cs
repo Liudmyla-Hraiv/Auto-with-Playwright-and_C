@@ -15,7 +15,7 @@ namespace MiaProject.Pages
         }
         public async Task GoUrl()
         {
-            await _page.GotoAsync("https://miacademy.co/#/");
+            await _page.GotoAsync("https://miacademy.co/#/",new PageGotoOptions { WaitUntil = WaitUntilState.Load });
         }
         public async Task GoLink()
         {

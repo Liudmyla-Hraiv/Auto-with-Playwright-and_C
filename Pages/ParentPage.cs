@@ -8,7 +8,6 @@ namespace MiaProject.Pages
         private readonly ILocator _firstName1;
         private readonly ILocator _lastName1;
         private readonly ILocator _email1;
-        private readonly ILocator _dialCode;
         private readonly ILocator _phone1;
         private readonly ILocator _secondParent;
         private readonly ILocator _firstName2;
@@ -30,14 +29,18 @@ namespace MiaProject.Pages
         private readonly ILocator _startDate;
         private readonly ILocator _nextBtn;
         private readonly ILocator _backBtn;
-    
+//Erorr msgs
+         private readonly ILocator _errorName;
+        private readonly ILocator _errorEmail;
+        private readonly ILocator _errorPhone;
+        private readonly ILocator _errorDate;
+
         public ParentPage(IPage page)
         {
         _page=page;
         _firstName1 = _page.Locator("(//input[@name='Name'])[1]");
         _lastName1 = _page.Locator("(//input[@name='Name'])[2]");
         _email1 = _page.Locator("#Email-arialabel");
-        _dialCode = _page.GetByTitle("United States: +");
         _phone1 = _page.Locator("#PhoneNumber");
         _secondParent = _page.GetByRole(AriaRole.Combobox, new() { Name = "-Select-" });
         _firstName2 = _page.Locator("(//input[@name='Name1'])[1]");
@@ -59,15 +62,19 @@ namespace MiaProject.Pages
         _startDate = _page.Locator("#Date-date");
         _nextBtn= _page.GetByLabel("Next Navigates to page 3 out of 4");
         _backBtn= _page.GetByLabel("Back Navigates to page 1 out of 4");
+//Error msgs
+        _errorName= _page.Locator("#error-Name");
+        _errorEmail=_page.Locator("#error-Email");
+        _errorPhone=_page.Locator("#error-PhoneNumber");
+        _errorDate= _page.Locator("#error-Date");
         }
         public async Task fillfirstParent(string first1, string last1, string em1,string code1, string ph1 )
         {
             await _firstName1.FillAsync(first1);
             await _lastName1.FillAsync(last1);
             await _email1.FillAsync(em1);
-            await _dialCode.ClickAsync();
-            await _page.GetByText(code1).ScrollIntoViewIfNeededAsync();
-            await _page.GetByText(code1).ClickAsync();
+            await _phone1.FillAsync(code1);
+            await _phone1.PressAsync("Enter");
             await _phone1.FillAsync(ph1);
            
         }
@@ -85,6 +92,12 @@ namespace MiaProject.Pages
             await _email2.FillAsync(em2);
             await _phone2.FillAsync(ph2);
         }
+        public async Task GetPhoneNumber1(string ph)
+        {
+         await _phone1.FillAsync(ph);
+         await _phone1.PressAsync("Enter");
+        }
+
         public async Task check_searchEngine()
         {
            await _searchEngine.CheckAsync();
@@ -143,6 +156,46 @@ namespace MiaProject.Pages
         public async Task GoBackPage(){
            await _backBtn.ClickAsync();
         }
-
+//Get Error
+      public async Task<string?> GetErrorNameMsgAsync()
+      {
+         if(await _errorName.IsVisibleAsync())
+         {
+            await _errorName.ScreenshotAsync(new LocatorScreenshotOptions  { 
+               Path = $"C:\\Documents\\MiaProject\\Screenshots\\{TestContext.CurrentContext.Test.Name}.png" });
+            return await _errorName.InnerTextAsync();
+         }
+         return string.Empty;
+      }
+      public async Task<string?> GetErrorEmailMsgAsync()
+      {
+         if(await _errorEmail.IsVisibleAsync())
+         {
+            await _errorEmail.ScreenshotAsync(new LocatorScreenshotOptions  { 
+               Path = $"C:\\Documents\\MiaProject\\Screenshots\\{TestContext.CurrentContext.Test.Name}.png" });
+            return await _errorEmail.InnerTextAsync();
+         }
+         return string.Empty;
+      }
+      public async Task<string?> GetErrorPhoneMsgAsync()
+      {
+         if(await _errorPhone.IsVisibleAsync())
+         {
+            await _errorPhone.ScreenshotAsync(new LocatorScreenshotOptions  { 
+               Path = $"C:\\Documents\\MiaProject\\Screenshots\\{TestContext.CurrentContext.Test.Name}.png" });
+            return await _errorPhone.InnerTextAsync();
+         }
+         return string.Empty;
+      }
+      public async Task<string?> GetErrorDateMsgAsync()
+      {
+         if(await _errorDate.IsVisibleAsync())
+         {
+            await _errorDate.ScreenshotAsync(new LocatorScreenshotOptions  { 
+               Path = $"C:\\Documents\\MiaProject\\Screenshots\\{TestContext.CurrentContext.Test.Name}.png" });
+           return await _errorDate.InnerTextAsync();
+         }
+         return string.Empty;
+      }
     } 
 }  

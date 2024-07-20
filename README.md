@@ -6,3 +6,4 @@ apply to MOHS
 fill in the Parent Information page
 fill in the Student Information page
 TESTS STOP HERE
+# dotnet test -- NUnit.NumberOfTestWorkers=5
