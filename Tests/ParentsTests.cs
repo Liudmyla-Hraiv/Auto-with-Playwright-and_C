@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace  MiaProject.Tests
 {
-    
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
      public class PlaywrightTests2
     {
         private IBrowser _browser;
